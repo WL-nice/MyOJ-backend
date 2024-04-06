@@ -53,7 +53,7 @@ public class UserController {
         String userAccount = userRegisterRequest.getUserAccount();
         String userPassword = userRegisterRequest.getUserPassword();
         String checkPassword = userRegisterRequest.getCheckPassword();
-        String acptCode = userRegisterRequest.getAcptCode();
+//      String acptCode = userRegisterRequest.getAcptCode();
         if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -103,11 +103,20 @@ public class UserController {
             throw new BusinessException(ErrorCode.NULL_ERROR);
         }
         Long id = currentUser.getId();
-
+        String redisKey = String.format("MyOJ:current:%s", currentUser.getId());
+        ValueOperations<String,Object> ops = redisTemplate.opsForValue();
+        User safetyuser=(User)ops.get(redisKey);
+        if(safetyuser!=null){
+            return ResultUtils.success(safetyuser);
+        }
         User user = userService.getById(id);
-        User safetyuser = userService.getSafetUser(user);
+        safetyuser = userService.getSafetUser(user);
+        try{
+            ops.set(redisKey,safetyuser,5,TimeUnit.MINUTES);
+        }catch (Exception e){
+            log.error("redis set key error", e);
+        }
         return ResultUtils.success(safetyuser);
-
     }
 
 
@@ -130,7 +139,7 @@ public class UserController {
     public BaseResponse<Page<User>> userSearch(long pageSize, long pageNum, HttpServletRequest request) {
         User loginUser = userService.getLoginUser(request);
         //如果有缓存，直接读缓存
-        String redisKey = String.format("bromatch:search:%s", loginUser.getId());
+        String redisKey = String.format("MyOJ:search:%s", loginUser.getId());
         ValueOperations<String, Object> ValueOperations = redisTemplate.opsForValue();
         Page<User> userPage = (Page<User>) ValueOperations.get(redisKey);
         if (userPage != null) {
