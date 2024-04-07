@@ -7,9 +7,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wanglei.myojback.commmon.ErrorCode;
 import com.wanglei.myojback.exception.BusinessException;
-import com.wanglei.myojback.model.domain.request.UserUpdateRequest;
+import com.wanglei.myojback.model.request.User.UserUpdateRequest;
+import com.wanglei.myojback.model.vo.UserVo;
 import com.wanglei.myojback.service.UserService;
-import com.wanglei.myojback.model.domain.User;
+import com.wanglei.myojback.model.entity.User;
 import com.wanglei.myojback.mapper.UserMapper;
 import com.wanglei.myojback.util.AlgorithmUtils;
 import jakarta.annotation.Resource;
@@ -270,6 +271,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             finalUserList.add(userIdUserListMap.get(userId).get(0));
         }
         return finalUserList;
+    }
+
+    @Override
+    public UserVo getUserVO(User user) {
+        if(user==null){
+            throw new BusinessException(ErrorCode.NULL_ERROR);
+        }
+        UserVo userVo = new UserVo();
+        BeanUtils.copyProperties(user,userVo);
+        return userVo;
     }
 
 

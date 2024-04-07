@@ -1,13 +1,13 @@
 package com.wanglei.myojback.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.wanglei.myojback.model.domain.Team;
-import com.wanglei.myojback.model.domain.User;
-import com.wanglei.myojback.model.domain.dto.TeamQuery;
-import com.wanglei.myojback.model.domain.request.TeamJoinRequest;
-import com.wanglei.myojback.model.domain.request.TeamQuitRequest;
-import com.wanglei.myojback.model.domain.request.TeamUpdateRequest;
-import com.wanglei.myojback.model.domain.vo.TeamUserVo;
+import com.wanglei.myojback.model.entity.Team;
+import com.wanglei.myojback.model.entity.User;
+import com.wanglei.myojback.model.dto.TeamQuery;
+import com.wanglei.myojback.model.request.Team.TeamJoinRequest;
+import com.wanglei.myojback.model.request.Team.TeamQuitRequest;
+import com.wanglei.myojback.model.request.Team.TeamUpdateRequest;
+import com.wanglei.myojback.model.vo.TeamUserVo;
 
 import java.util.List;
 

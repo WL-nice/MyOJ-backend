@@ -1,7 +1,7 @@
 package com.wanglei.myojback.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.wanglei.myojback.model.domain.UserTeam ;
+import com.wanglei.myojback.model.entity.UserTeam;
 
 /**
 * @author admin

@@ -1,14 +1,12 @@
 package com.wanglei.myojback.service;
 
-import com.wanglei.myojback.model.domain.User;
+import com.wanglei.myojback.model.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.wanglei.myojback.model.domain.request.UserUpdateRequest;
+import com.wanglei.myojback.model.request.User.UserUpdateRequest;
+import com.wanglei.myojback.model.vo.UserVo;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
-
-import static com.wanglei.myojback.constant.UserConstant.ADMIN_ROLE;
-import static com.wanglei.myojback.constant.UserConstant.USER_LOGIN_STATE;
 
 /**
  * 用户服务
@@ -90,6 +88,8 @@ public interface UserService extends IService<User> {
      * @return
      */
     List<User> matchUsers(long num, User loginUser);
+
+    UserVo getUserVO(User user);
 }
 
 

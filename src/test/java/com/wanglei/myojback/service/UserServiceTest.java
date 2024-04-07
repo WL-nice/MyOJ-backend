@@ -1,11 +1,9 @@
 package com.wanglei.myojback.service;
 
-import com.wanglei.myojback.model.domain.User;
+import com.wanglei.myojback.model.entity.User;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

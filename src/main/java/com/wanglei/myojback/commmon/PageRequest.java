@@ -1,5 +1,6 @@
 package com.wanglei.myojback.commmon;
 
+import com.wanglei.myojback.constant.CommonConstant;
 import lombok.Data;
 
 /**
@@ -15,5 +16,15 @@ public class PageRequest {
     /**
      * 当前第几页
      */
-    protected int pageNum = 1;
+    protected int current = 1;
+
+    /**
+     * 排序顺序（默认升序）
+     */
+    private String sortOrder = CommonConstant.SORT_ORDER_ASC;
+
+    /**
+     * 排序字段
+     */
+    private String sortField;
 }

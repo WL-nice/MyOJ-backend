@@ -2,7 +2,7 @@ package com.wanglei.myojback.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wanglei.myojback.mapper.UserTeamMapper ;
-import com.wanglei.myojback.model.domain.UserTeam;
+import com.wanglei.myojback.model.entity.UserTeam;
 import com.wanglei.myojback.service.UserTeamService ;
 import org.springframework.stereotype.Service;
 

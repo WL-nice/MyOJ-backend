@@ -1,22 +1,20 @@
 package com.wanglei.myojback.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wanglei.myojback.commmon.ErrorCode;
-import com.wanglei.myojback.config.RedissonConfig;
 import com.wanglei.myojback.exception.BusinessException;
-import com.wanglei.myojback.model.domain.Team;
+import com.wanglei.myojback.model.entity.Team;
 import com.wanglei.myojback.mapper.TeamMapper;
-import com.wanglei.myojback.model.domain.User;
-import com.wanglei.myojback.model.domain.UserTeam;
-import com.wanglei.myojback.model.domain.dto.TeamQuery;
-import com.wanglei.myojback.model.domain.enums.TeamStatus;
-import com.wanglei.myojback.model.domain.request.TeamJoinRequest;
-import com.wanglei.myojback.model.domain.request.TeamQuitRequest;
-import com.wanglei.myojback.model.domain.request.TeamUpdateRequest;
-import com.wanglei.myojback.model.domain.vo.TeamUserVo;
-import com.wanglei.myojback.model.domain.vo.UserVo;
+import com.wanglei.myojback.model.entity.User;
+import com.wanglei.myojback.model.entity.UserTeam;
+import com.wanglei.myojback.model.dto.TeamQuery;
+import com.wanglei.myojback.model.enums.TeamStatus;
+import com.wanglei.myojback.model.request.Team.TeamJoinRequest;
+import com.wanglei.myojback.model.request.Team.TeamQuitRequest;
+import com.wanglei.myojback.model.request.Team.TeamUpdateRequest;
+import com.wanglei.myojback.model.vo.TeamUserVo;
+import com.wanglei.myojback.model.vo.UserVo;
 import com.wanglei.myojback.service.TeamService;
 import com.wanglei.myojback.service.UserService;
 import com.wanglei.myojback.service.UserTeamService;
@@ -25,13 +23,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import javax.xml.crypto.Data;
-import java.beans.Transient;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 

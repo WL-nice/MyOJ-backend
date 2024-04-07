@@ -1,7 +1,7 @@
 package com.wanglei.myojback.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.wanglei.myojback.model.domain.UserTeam ;
+import com.wanglei.myojback.model.entity.UserTeam;
 
 /**
 * @author admin

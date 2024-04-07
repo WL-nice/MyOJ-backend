@@ -2,7 +2,7 @@ package com.wanglei.myojback.job;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.wanglei.myojback.model.domain.User;
+import com.wanglei.myojback.model.entity.User;
 import com.wanglei.myojback.service.UserService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;

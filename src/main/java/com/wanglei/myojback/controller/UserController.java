@@ -1,16 +1,15 @@
 package com.wanglei.myojback.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wanglei.myojback.commmon.BaseResponse;
 import com.wanglei.myojback.commmon.ErrorCode;
 import com.wanglei.myojback.commmon.ResultUtils;
 import com.wanglei.myojback.exception.BusinessException;
-import com.wanglei.myojback.model.domain.User;
-import com.wanglei.myojback.model.domain.request.UserLoginRequest;
-import com.wanglei.myojback.model.domain.request.UserRegisterRequest;
-import com.wanglei.myojback.model.domain.request.UserUpdateRequest;
+import com.wanglei.myojback.model.entity.User;
+import com.wanglei.myojback.model.request.User.UserLoginRequest;
+import com.wanglei.myojback.model.request.User.UserRegisterRequest;
+import com.wanglei.myojback.model.request.User.UserUpdateRequest;
 import com.wanglei.myojback.service.UserService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,9 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
-import static com.wanglei.myojback.constant.UserConstant.ADMIN_ROLE;
 import static com.wanglei.myojback.constant.UserConstant.USER_LOGIN_STATE;
 
 @RestController //适用于编写restful风格的API，返回值默认为json类型

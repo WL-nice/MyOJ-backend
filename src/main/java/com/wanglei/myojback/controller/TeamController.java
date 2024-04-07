@@ -5,25 +5,24 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wanglei.myojback.commmon.BaseResponse;
 import com.wanglei.myojback.commmon.ErrorCode;
 import com.wanglei.myojback.commmon.ResultUtils;
-import com.wanglei.myojback.model.domain.User;
-import com.wanglei.myojback.model.domain.UserTeam;
-import com.wanglei.myojback.model.domain.dto.TeamQuery;
+import com.wanglei.myojback.model.entity.User;
+import com.wanglei.myojback.model.entity.UserTeam;
+import com.wanglei.myojback.model.dto.TeamQuery;
 import com.wanglei.myojback.exception.BusinessException;
-import com.wanglei.myojback.model.domain.Team;
-import com.wanglei.myojback.model.domain.request.TeamAddRequest;
-import com.wanglei.myojback.model.domain.request.TeamJoinRequest;
-import com.wanglei.myojback.model.domain.request.TeamQuitRequest;
-import com.wanglei.myojback.model.domain.request.TeamUpdateRequest;
-import com.wanglei.myojback.model.domain.vo.TeamUserVo;
-import com.wanglei.myojback.model.domain.vo.UserVo;
+import com.wanglei.myojback.model.entity.Team;
+import com.wanglei.myojback.model.request.Team.TeamAddRequest;
+import com.wanglei.myojback.model.request.Team.TeamJoinRequest;
+import com.wanglei.myojback.model.request.Team.TeamQuitRequest;
+import com.wanglei.myojback.model.request.Team.TeamUpdateRequest;
+import com.wanglei.myojback.model.vo.TeamUserVo;
 import com.wanglei.myojback.service.TeamService;
 import com.wanglei.myojback.service.UserService;
 import com.wanglei.myojback.service.UserTeamService;
 import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -108,6 +107,9 @@ public class TeamController {
         //查询队伍列表
         List<TeamUserVo> teamlist = teamService.listTeams(teamQuery, userService.isAdmin(request));
         List<Long> teamIdList = teamlist.stream().map(TeamUserVo::getId).collect(Collectors.toList());
+        if(teamIdList.isEmpty()){
+            return ResultUtils.error(ErrorCode.PARAMS_ERROR,"队伍不存在");
+        }
         QueryWrapper<UserTeam> userTeamQueryWrapper = new QueryWrapper<>();
         try{
             User loginUser = userService.getLoginUser(request);
@@ -121,7 +123,9 @@ public class TeamController {
                 team.setHasJoin(hasJoin);
             });
 
-        }catch (Exception e){}
+        }catch (Exception e){
+            log.error("",e);
+        }
         // 3、查询已加入队伍的人数
         QueryWrapper<UserTeam> userTeamJoinQueryWrapper = new QueryWrapper<>();
         userTeamJoinQueryWrapper.in("teamId", teamIdList);
@@ -140,9 +144,9 @@ public class TeamController {
         Team team = new Team();
         BeanUtils.copyProperties(teamQuery, team);
         int pageSize = teamQuery.getPageSize();
-        int pageNum = teamQuery.getPageNum();
+        int pageNum = teamQuery.getCurrent();
         QueryWrapper<Team> queryWrapper = new QueryWrapper<>();
-        Page<Team> page = teamService.page(new Page<>(pageSize, pageNum), queryWrapper);
+        Page<Team> page = teamService.page(new Page<>(pageNum, pageSize), queryWrapper);
         return ResultUtils.success(page);
     }
 
