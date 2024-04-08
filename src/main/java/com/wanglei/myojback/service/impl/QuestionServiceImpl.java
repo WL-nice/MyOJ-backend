@@ -125,8 +125,8 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
                 queryWrapper.like("tags", "\"" + tag + "\"");
             }
         }
-        queryWrapper.eq(id != 0, "id", id);
-        queryWrapper.eq(userId != 0, "userId", userId);
+        queryWrapper.eq(id != null && id > 0, "id", id);
+        queryWrapper.eq(userId != null && userId > 0, "userId", userId);
 
         queryWrapper.orderBy(StringUtils.isNotBlank(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC), sortField);
         return queryWrapper;
@@ -134,7 +134,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
 
     @Override
     public QuestionVO getQuestionVO(Question question) {
-        if(question==null){
+        if (question == null) {
             return null;
         }
         return QuestionVO.objToVo(question);

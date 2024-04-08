@@ -2,10 +2,11 @@ package com.wanglei.myojback.model.request.question;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class QuestionAddRequest {
+public class QuestionAddRequest implements Serializable {
 
     /**
      * 标题
@@ -31,11 +32,13 @@ public class QuestionAddRequest {
     /**
      * 判题用例（json 数组）
      */
-    private JudgeCase judgeCase;
+    private List<JudgeCase> judgeCase;
 
     /**
      * 判题配置（json 对象）
      */
     private JudgeConfig judgeConfig;
+
+    private static final long serialVersionUID = 1L;
 
 }

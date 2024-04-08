@@ -59,12 +59,12 @@ public class QuestionController {
         if (tags != null) {
             question.setTags(JSONUtil.toJsonStr(tags));
         }
-        JudgeCase judgeCase = questionAddRequest.getJudgeCase();
-        if(judgeCase!=null){
+        List<JudgeCase> judgeCase = questionAddRequest.getJudgeCase();
+        if (judgeCase != null) {
             question.setJudgeCase(JSONUtil.toJsonStr(judgeCase));
         }
         JudgeConfig judgeConfig = questionAddRequest.getJudgeConfig();
-        if(judgeConfig!=null){
+        if (judgeConfig != null) {
             question.setJudgeConfig(JSONUtil.toJsonStr(judgeConfig));
         }
         question.setUserId(loginUser.getId());
@@ -117,12 +117,12 @@ public class QuestionController {
         if (tags != null) {
             question.setTags(JSONUtil.toJsonStr(tags));
         }
-        JudgeCase judgeCase = questionUpdateRequest.getJudgeCase();
-        if(judgeCase!=null){
+        List<JudgeCase> judgeCase = questionUpdateRequest.getJudgeCase();
+        if (judgeCase != null) {
             question.setJudgeCase(JSONUtil.toJsonStr(judgeCase));
         }
         JudgeConfig judgeConfig = questionUpdateRequest.getJudgeConfig();
-        if(judgeConfig!=null){
+        if (judgeConfig != null) {
             question.setJudgeConfig(JSONUtil.toJsonStr(judgeConfig));
         }
         // 参数校验
@@ -140,20 +140,20 @@ public class QuestionController {
 
 
     /**
-     * 分页获取列表
+     * 分页获取列表（包装类）
      *
      * @param questionQueryRequest
      * @return
      */
-    @PostMapping("/list/page")
-    public BaseResponse<Page<QuestionVO>> listQuestionByPage(@RequestBody QuestionQueryRequest questionQueryRequest, HttpServletRequest request) {
+    @PostMapping("/list/page/vo")
+    public BaseResponse<Page<QuestionVO>> listQuestionVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest, HttpServletRequest request) {
         if (questionQueryRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         long current = questionQueryRequest.getCurrent();
         long size = questionQueryRequest.getPageSize();
         QueryWrapper<Question> queryWrapper = questionService.getQueryWrapper(questionQueryRequest);
-        Page<Question> questionPage = questionService.page(new Page<>(current,size), queryWrapper);
+        Page<Question> questionPage = questionService.page(new Page<>(current, size), queryWrapper);
         Page<QuestionVO> questionVOPage = questionService.getQuestionVOPage(questionPage, request);
         return ResultUtils.success(questionVOPage);
     }
@@ -168,23 +168,37 @@ public class QuestionController {
         }
     }
 
-    @GetMapping("/get/vo")
-    public BaseResponse<Question> getQuestionById(@RequestParam("id") long id,HttpServletRequest request){
-        if(id<=0){
+    @GetMapping("/get")
+    public BaseResponse<Question> getQuestionById(@RequestParam("id") long id, HttpServletRequest request) {
+        if (id <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         Question question = questionService.getById(id);
-        if(question==null){
+        if (question == null) {
             throw new BusinessException(ErrorCode.NULL_ERROR);
         }
-        User loginUser = userService.getLoginUser(request);
         // 不是本人或管理员，不能直接获取所有信息
-        if (!question.getUserId().equals(loginUser.getId()) && !userService.isAdmin(loginUser)) {
-            throw new BusinessException(ErrorCode.NO_AUTH);
-        }
+        canOperateQuestion(request,question);
 
         return ResultUtils.success(question);
 
+    }
+    /**
+     * 分页获取列表(管理员）
+     *
+     * @param questionQueryRequest
+     * @return
+     */
+    @PostMapping("/list/page")
+    public BaseResponse<Page<Question>> listQuestionByPage(@RequestBody QuestionQueryRequest questionQueryRequest, HttpServletRequest request){
+        if(questionQueryRequest==null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        long current = questionQueryRequest.getCurrent();
+        long size = questionQueryRequest.getPageSize();
+        QueryWrapper<Question> queryWrapper = questionService.getQueryWrapper(questionQueryRequest);
+        Page<Question> questionPage = questionService.page(new Page<>(current, size), queryWrapper);
+        return ResultUtils.success(questionPage);
     }
 
 }

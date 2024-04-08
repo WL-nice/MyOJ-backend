@@ -2,23 +2,27 @@ package com.wanglei.myojback.model.request.question;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * 题目配置
  */
 @Data
-public class JudgeConfig {
+public class JudgeConfig implements Serializable {
     /**
      * 时间限制（ms)
      */
-    private long timeLimit;
+    private Long timeLimit;
 
     /**
      * 内存限制(kb)
      */
-    private long memoryLimit;
+    private Long memoryLimit;
 
     /**
      * 堆栈限制(kb)
      */
-    private long stackLimit;
+    private Long stackLimit;
+
+    private static final long serialVersionUID = 1L;
 }

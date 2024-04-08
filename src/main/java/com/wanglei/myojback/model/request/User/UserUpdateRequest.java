@@ -2,6 +2,8 @@ package com.wanglei.myojback.model.request.User;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class UserUpdateRequest {
     /**
@@ -48,5 +50,5 @@ public class UserUpdateRequest {
     /**
      * 标签列表 [json]
      */
-    private String tags;
+    private List<String> tags;
 }

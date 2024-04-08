@@ -3,6 +3,7 @@ package com.wanglei.myojback.model.vo;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.annotation.*;
 import com.wanglei.myojback.model.entity.Question;
+import com.wanglei.myojback.model.request.question.JudgeCase;
 import com.wanglei.myojback.model.request.question.JudgeConfig;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
@@ -15,7 +16,6 @@ import java.util.List;
 /**
  * 题目封装类
  */
-@TableName(value ="question")
 @Data
 public class QuestionVO implements Serializable {
     /**
@@ -53,6 +53,7 @@ public class QuestionVO implements Serializable {
      * 判题配置
      */
     private JudgeConfig judgeConfig;
+
 
     /**
      * 点赞数
