@@ -4,6 +4,8 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
 @Data
 public class UserVo implements Serializable {
     /**
@@ -68,7 +70,7 @@ public class UserVo implements Serializable {
     /**
      * 标签列表 [json]
      */
-    private String tags;
+    private List<String> tags;
 
     private static final long serialVersionUID = 1L;
 

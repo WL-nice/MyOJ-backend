@@ -4,12 +4,11 @@ import java.util.List;
 
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
+
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wanglei.myojback.annotation.AuthCheck;
 import com.wanglei.myojback.commmon.*;
-import com.wanglei.myojback.constant.CommonConstant;
+
 import com.wanglei.myojback.exception.BusinessException;
 import com.wanglei.myojback.model.entity.Question;
 import com.wanglei.myojback.model.entity.User;
@@ -20,7 +19,7 @@ import com.wanglei.myojback.service.UserService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -183,6 +182,21 @@ public class QuestionController {
         return ResultUtils.success(question);
 
     }
+
+    @GetMapping("/get/vo")
+    public BaseResponse<QuestionVO> getQuestionVOById(@RequestParam("id") long id, HttpServletRequest request) {
+        if (id <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        Question question = questionService.getById(id);
+        if (question == null) {
+            throw new BusinessException(ErrorCode.NULL_ERROR);
+        }
+        QuestionVO questionVO = QuestionVO.objToVo(question);
+
+        return ResultUtils.success(questionVO);
+
+    }
     /**
      * 分页获取列表(管理员）
      *
@@ -190,6 +204,7 @@ public class QuestionController {
      * @return
      */
     @PostMapping("/list/page")
+    @AuthCheck(mustRole = "admin")
     public BaseResponse<Page<Question>> listQuestionByPage(@RequestBody QuestionQueryRequest questionQueryRequest, HttpServletRequest request){
         if(questionQueryRequest==null){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);

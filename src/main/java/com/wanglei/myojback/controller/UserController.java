@@ -1,16 +1,19 @@
 package com.wanglei.myojback.controller;
 
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wanglei.myojback.annotation.AuthCheck;
 import com.wanglei.myojback.commmon.BaseResponse;
 import com.wanglei.myojback.commmon.ErrorCode;
 import com.wanglei.myojback.commmon.ResultUtils;
 import com.wanglei.myojback.exception.BusinessException;
 import com.wanglei.myojback.model.entity.User;
 import com.wanglei.myojback.model.request.User.UserLoginRequest;
+import com.wanglei.myojback.model.request.User.UserQueryRequest;
 import com.wanglei.myojback.model.request.User.UserRegisterRequest;
 import com.wanglei.myojback.model.request.User.UserUpdateRequest;
+import com.wanglei.myojback.model.request.question.DeleteRequest;
+import com.wanglei.myojback.model.vo.UserVo;
 import com.wanglei.myojback.service.UserService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -155,6 +158,19 @@ public class UserController {
         return ResultUtils.success(userPage);
     }
 
+    @PostMapping("/list/page")
+    @AuthCheck(mustRole = "admin")
+    public BaseResponse<Page<UserVo>> listUserByPage(@RequestBody UserQueryRequest userQueryRequest, HttpServletRequest request){
+        if(userQueryRequest==null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        long current = userQueryRequest.getCurrent();
+        long size = userQueryRequest.getPageSize();
+        QueryWrapper<User> queryWrapper = userService.getQueryWrapper(userQueryRequest);
+        Page<User> questionPage = userService.page(new Page<>(current, size), queryWrapper);
+        Page<UserVo> questionVOPage = userService.getUserVOPage(questionPage, request);
+        return ResultUtils.success(questionVOPage);
+    }
     @PostMapping("/update")
     public BaseResponse<Integer> updateUser(@RequestBody UserUpdateRequest userUpdateRequest, HttpServletRequest request) {
         if (userUpdateRequest == null) {
@@ -169,15 +185,12 @@ public class UserController {
      * 用户删除
      */
     @PostMapping("/delete")
-    public BaseResponse<Boolean> deleteUser(@RequestParam("id") long id, HttpServletRequest request) {
-        //仅管理员可查询
-        if (!userService.isAdmin(request)) {
-            throw new BusinessException(ErrorCode.NO_AUTH);
-        }
-        if (id <= 0) {
+    @AuthCheck(mustRole = "admin")
+    public BaseResponse<Boolean> deleteUser(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
+        if (deleteRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.NULL_ERROR);
         }
-        boolean result = userService.removeById(id);
+        boolean result = userService.removeById(deleteRequest.getId());
         return ResultUtils.success(result);
     }
 

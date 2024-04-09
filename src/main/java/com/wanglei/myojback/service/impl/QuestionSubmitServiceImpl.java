@@ -40,7 +40,7 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         Long userId = loginUser.getId();
 
         QuestionSubmit questionSubmit = new QuestionSubmit();
-        questionSubmit.setQuestionId(questionSubmit.getQuestionId());
+        questionSubmit.setQuestionId(questionSubmitAddRequest.getQuestionId());
         questionSubmit.setUserId(userId);
         questionSubmit.setCode(questionSubmitAddRequest.getCode());
         questionSubmit.setLanguage(language);

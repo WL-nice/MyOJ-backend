@@ -1,7 +1,10 @@
 package com.wanglei.myojback.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wanglei.myojback.model.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wanglei.myojback.model.request.User.UserQueryRequest;
 import com.wanglei.myojback.model.request.User.UserUpdateRequest;
 import com.wanglei.myojback.model.vo.UserVo;
 import jakarta.servlet.http.HttpServletRequest;
@@ -90,6 +93,10 @@ public interface UserService extends IService<User> {
     List<User> matchUsers(long num, User loginUser);
 
     UserVo getUserVO(User user);
+
+    QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest);
+
+    Page<UserVo> getUserVOPage(Page<User> questionPage, HttpServletRequest request);
 }
 
 

@@ -1,13 +1,21 @@
 package com.wanglei.myojback.service.impl;
 
+import java.util.*;
 
+
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wanglei.myojback.commmon.ErrorCode;
+import com.wanglei.myojback.constant.CommonConstant;
 import com.wanglei.myojback.exception.BusinessException;
+import com.wanglei.myojback.model.entity.Question;
+import com.wanglei.myojback.model.request.User.UserQueryRequest;
 import com.wanglei.myojback.model.request.User.UserUpdateRequest;
+import com.wanglei.myojback.model.vo.QuestionVO;
 import com.wanglei.myojback.model.vo.UserVo;
 import com.wanglei.myojback.service.UserService;
 import com.wanglei.myojback.model.entity.User;
@@ -22,10 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
 import org.apache.commons.math3.util.Pair;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -43,6 +48,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         implements UserService {
     @Resource
     private UserMapper userMapper;
+
     /**
      * 盐值，混淆密码
      */
@@ -96,6 +102,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user.setUserAccount(userAccount);
         user.setUserPassword(entryptfPassword);
 //        user.setAcptCode(acptCode);
+        user.setTags("[]");
         boolean saveResult = this.save(user);
         if (!saveResult) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -216,8 +223,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (oldUser == null) {
             throw new BusinessException(ErrorCode.NULL_ERROR);
         }
-        User user =new User();
-        if(StringUtils.isBlank(userUpdateRequest.getUserPassword())){
+        User user = new User();
+        if (StringUtils.isBlank(userUpdateRequest.getUserPassword())) {
             user.setUserPassword(oldUser.getUserPassword());
         }
         return userMapper.updateById(user);
@@ -275,12 +282,60 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Override
     public UserVo getUserVO(User user) {
-        if(user==null){
+        if (user == null) {
             throw new BusinessException(ErrorCode.NULL_ERROR);
         }
         UserVo userVo = new UserVo();
-        BeanUtils.copyProperties(user,userVo);
+        BeanUtils.copyProperties(user, userVo);
+        String tags = user.getTags();
+        if(StringUtils.isNotBlank(tags)){
+            userVo.setTags(JSONUtil.toList(tags,String.class));
+        }
         return userVo;
+    }
+
+    @Override
+    public QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest) {
+        Long id = userQueryRequest.getId();
+        String username = userQueryRequest.getUsername();
+        String userAccount = userQueryRequest.getUserAccount();
+        String phone = userQueryRequest.getPhone();
+        String email = userQueryRequest.getEmail();
+        List<String> tags = userQueryRequest.getTags();
+        String sortOrder = userQueryRequest.getSortOrder();
+        String sortField = userQueryRequest.getSortField();
+
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.like(StringUtils.isNotBlank(username), "username", username);
+        queryWrapper.like(StringUtils.isNotBlank(userAccount), "userAccount", userAccount);
+        queryWrapper.like(StringUtils.isNotBlank(phone), "phone", phone);
+        queryWrapper.like(StringUtils.isNotBlank(email), "email", email);
+        queryWrapper.like(StringUtils.isNotBlank(phone), "phone", phone);
+        if (com.baomidou.mybatisplus.core.toolkit.CollectionUtils.isNotEmpty(tags)) {
+            for (String tag : tags) {
+                queryWrapper.like("tags", "\"" + tag + "\"");
+            }
+        }
+        queryWrapper.eq(id != null && id > 0, "id", id);
+
+        queryWrapper.orderBy(StringUtils.isNotBlank(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC), sortField);
+        return queryWrapper;
+    }
+
+    @Override
+    public Page<UserVo> getUserVOPage(Page<User> userPage, HttpServletRequest request) {
+        List<User> userList = userPage.getRecords();
+        Page<UserVo> userVoPage = new Page<>(userPage.getCurrent(), userPage.getSize(), userPage.getTotal());
+        if (com.baomidou.mybatisplus.core.toolkit.CollectionUtils.isEmpty(userList)) {
+            return userVoPage;
+        }
+        // 填充信息
+        List<UserVo> userVOList = userList.stream().map(user -> {
+            UserVo userVO = getUserVO(user);
+            return userVO;
+        }).collect(Collectors.toList());
+        userVoPage.setRecords(userVOList);
+        return userVoPage;
     }
 
 
