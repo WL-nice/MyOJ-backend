@@ -56,7 +56,6 @@ public class UserVo implements Serializable {
     private Integer userStatus;
 
 
-
     /**
      * 用户身份
      */

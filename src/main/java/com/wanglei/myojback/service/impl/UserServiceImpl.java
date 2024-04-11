@@ -147,9 +147,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
         //3、脱敏
         User safetUser = getSafetUser(user);
+//        UserVo userVO = getUserVO(user);
         //4、记录用户登录态
-        request.getSession().setAttribute(USER_LOGIN_STATE, safetUser);
-        return safetUser;
+        request.getSession().setAttribute(USER_LOGIN_STATE, user);
+        return user;
     }
 
     /**
@@ -224,8 +225,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             throw new BusinessException(ErrorCode.NULL_ERROR);
         }
         User user = new User();
-        if (StringUtils.isBlank(userUpdateRequest.getUserPassword())) {
-            user.setUserPassword(oldUser.getUserPassword());
+        BeanUtils.copyProperties(userUpdateRequest,user);
+        List<String> tags = userUpdateRequest.getTags();
+        if(tags!=null){
+            user.setTags(JSONUtil.toJsonStr(tags));
         }
         return userMapper.updateById(user);
 
@@ -288,8 +291,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         UserVo userVo = new UserVo();
         BeanUtils.copyProperties(user, userVo);
         String tags = user.getTags();
-        if(StringUtils.isNotBlank(tags)){
-            userVo.setTags(JSONUtil.toList(tags,String.class));
+        if (StringUtils.isNotBlank(tags)) {
+            userVo.setTags(JSONUtil.toList(tags, String.class));
         }
         return userVo;
     }

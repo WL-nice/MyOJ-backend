@@ -31,7 +31,7 @@ import static com.wanglei.myojback.constant.UserConstant.USER_LOGIN_STATE;
 
 @RestController //适用于编写restful风格的API，返回值默认为json类型
 @RequestMapping("/user")
-@CrossOrigin(origins = "http://localhost:8080",allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:8080", allowCredentials = "true")
 @Slf4j
 public class UserController {
 
@@ -105,16 +105,16 @@ public class UserController {
         }
         Long id = currentUser.getId();
         String redisKey = String.format("MyOJ:current:%s", currentUser.getId());
-        ValueOperations<String,Object> ops = redisTemplate.opsForValue();
-        User safetyuser=(User)ops.get(redisKey);
-        if(safetyuser!=null){
+        ValueOperations<String, Object> ops = redisTemplate.opsForValue();
+        User safetyuser = (User) ops.get(redisKey);
+        if (safetyuser != null) {
             return ResultUtils.success(safetyuser);
         }
         User user = userService.getById(id);
         safetyuser = userService.getSafetUser(user);
-        try{
-            ops.set(redisKey,safetyuser,5,TimeUnit.MINUTES);
-        }catch (Exception e){
+        try {
+            ops.set(redisKey, safetyuser, 5, TimeUnit.MINUTES);
+        } catch (Exception e) {
             log.error("redis set key error", e);
         }
         return ResultUtils.success(safetyuser);
@@ -160,8 +160,8 @@ public class UserController {
 
     @PostMapping("/list/page")
     @AuthCheck(mustRole = "admin")
-    public BaseResponse<Page<UserVo>> listUserByPage(@RequestBody UserQueryRequest userQueryRequest, HttpServletRequest request){
-        if(userQueryRequest==null){
+    public BaseResponse<Page<UserVo>> listUserByPage(@RequestBody UserQueryRequest userQueryRequest, HttpServletRequest request) {
+        if (userQueryRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         long current = userQueryRequest.getCurrent();
@@ -171,6 +171,7 @@ public class UserController {
         Page<UserVo> questionVOPage = userService.getUserVOPage(questionPage, request);
         return ResultUtils.success(questionVOPage);
     }
+
     @PostMapping("/update")
     public BaseResponse<Integer> updateUser(@RequestBody UserUpdateRequest userUpdateRequest, HttpServletRequest request) {
         if (userUpdateRequest == null) {
@@ -196,6 +197,7 @@ public class UserController {
 
     /**
      * 匹配用户
+     *
      * @param num
      * @param request
      * @return
@@ -208,7 +210,6 @@ public class UserController {
         User user = userService.getLoginUser(request);
         return ResultUtils.success(userService.matchUsers(num, user));
     }
-
 
 
 }

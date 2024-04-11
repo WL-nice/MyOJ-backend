@@ -4,6 +4,7 @@ package com.wanglei.myojback.model.request.Team;
 import lombok.Data;
 
 import java.util.Date;
+
 @Data
 public class TeamAddRequest {
 
@@ -41,9 +42,6 @@ public class TeamAddRequest {
      * 队伍状态
      */
     private Integer teamStatus;
-
-
-
 
 
 }

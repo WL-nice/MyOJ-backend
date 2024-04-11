@@ -18,7 +18,8 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,language,code,
+        id
+        ,language,code,
         judgeInfo,status,questionId,
         userId,createTime,updateTime,
         isDelete

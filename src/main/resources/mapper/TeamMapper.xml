@@ -5,21 +5,22 @@
 <mapper namespace="com.wanglei.myojback.mapper.TeamMapper">
 
     <resultMap id="BaseResultMap" type="com.wanglei.myojback.model.entity.Team">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="teamName" column="teamName" jdbcType="VARCHAR"/>
-            <result property="description" column="description" jdbcType="VARCHAR"/>
-            <result property="expireTime" column="expireTime" jdbcType="TIMESTAMP"/>
-            <result property="userId" column="userId" jdbcType="BIGINT"/>
-            <result property="password" column="password" jdbcType="VARCHAR"/>
-            <result property="maxNum" column="maxNum" jdbcType="INTEGER"/>
-            <result property="teamStatus" column="teamStatus" jdbcType="INTEGER"/>
-            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
-            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
-            <result property="isDelete" column="isDelete" jdbcType="INTEGER"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="teamName" column="teamName" jdbcType="VARCHAR"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="expireTime" column="expireTime" jdbcType="TIMESTAMP"/>
+        <result property="userId" column="userId" jdbcType="BIGINT"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="maxNum" column="maxNum" jdbcType="INTEGER"/>
+        <result property="teamStatus" column="teamStatus" jdbcType="INTEGER"/>
+        <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+        <result property="isDelete" column="isDelete" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,teamName,description,
+        id
+        ,teamName,description,
         expireTime,userId,password,
         maxNum,teamStatus,createTime,
         updateTime,isDelete

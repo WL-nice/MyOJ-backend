@@ -5,7 +5,7 @@ import com.wanglei.myojback.commmon.ErrorCode;
 /**
  * 自定义异常类
  */
-public class BusinessException extends RuntimeException{
+public class BusinessException extends RuntimeException {
 
     private final int code;
 
@@ -31,7 +31,7 @@ public class BusinessException extends RuntimeException{
         this.description = errorCode.getDescription();
     }
 
-    public BusinessException(ErrorCode errorCode,String description) {
+    public BusinessException(ErrorCode errorCode, String description) {
         super(errorCode.getMesssge());
         this.code = errorCode.getCode();
         this.description = description;

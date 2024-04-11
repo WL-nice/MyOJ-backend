@@ -4,7 +4,6 @@ package com.wanglei.myojback.model.request.Team;
 import lombok.Data;
 
 
-
 @Data
 public class TeamJoinRequest {
     /**
@@ -16,7 +15,6 @@ public class TeamJoinRequest {
      * 密码
      */
     private String password;
-
 
 
 }

@@ -84,8 +84,8 @@ class UserServiceTest {
     }
 
     @Test
-    void testSearchUserservice(){
-        List<String> tag = Arrays.asList("java","python");
+    void testSearchUserservice() {
+        List<String> tag = Arrays.asList("java", "python");
         List<User> userList = userservice.searchUserByTags(tag);
         log.info("result:" + userList);
         Assert.assertNotNull(userList);

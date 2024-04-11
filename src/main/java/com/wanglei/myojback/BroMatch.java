@@ -11,9 +11,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class BroMatch {
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		SpringApplication.run(BroMatch.class, args);
-	}
+        SpringApplication.run(BroMatch.class, args);
+    }
 
 }

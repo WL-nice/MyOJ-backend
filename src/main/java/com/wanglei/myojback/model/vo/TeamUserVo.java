@@ -1,7 +1,6 @@
 package com.wanglei.myojback.model.vo;
 
 
-
 import lombok.Data;
 
 import java.io.Serializable;

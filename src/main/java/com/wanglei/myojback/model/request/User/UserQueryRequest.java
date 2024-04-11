@@ -43,6 +43,6 @@ public class UserQueryRequest extends PageRequest {
     /**
      * 标签列表 [json]
      */
-    private List<String > tags;
+    private List<String> tags;
 
 }

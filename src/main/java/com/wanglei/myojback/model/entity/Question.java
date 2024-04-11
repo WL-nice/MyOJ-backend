@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-@TableName(value ="question")
+@TableName(value = "question")
 @Data
 public class Question implements Serializable {
     /**
@@ -29,7 +29,7 @@ public class Question implements Serializable {
     /**
      * 标签列表（json 数组）
      */
-    private String  tags;
+    private String tags;
 
     /**
      * 题目答案

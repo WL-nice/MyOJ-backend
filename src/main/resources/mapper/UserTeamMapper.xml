@@ -5,17 +5,18 @@
 <mapper namespace="com.wanglei.myojback.mapper.UserTeamMapper">
 
     <resultMap id="BaseResultMap" type="com.wanglei.myojback.model.entity.UserTeam">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="userId" column="userId" jdbcType="BIGINT"/>
-            <result property="teamId" column="teamId" jdbcType="BIGINT"/>
-            <result property="joinTime" column="joinTime" jdbcType="TIMESTAMP"/>
-            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
-            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
-            <result property="isDelete" column="isDelete" jdbcType="INTEGER"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="userId" column="userId" jdbcType="BIGINT"/>
+        <result property="teamId" column="teamId" jdbcType="BIGINT"/>
+        <result property="joinTime" column="joinTime" jdbcType="TIMESTAMP"/>
+        <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+        <result property="isDelete" column="isDelete" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,userId,teamId,
+        id
+        ,userId,teamId,
         joinTime,createTime,updateTime,
         isDelete
     </sql>

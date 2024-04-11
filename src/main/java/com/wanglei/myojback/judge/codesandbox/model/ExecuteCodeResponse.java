@@ -1,6 +1,5 @@
 package com.wanglei.myojback.judge.codesandbox.model;
 
-import com.wanglei.myojback.model.request.questionsubmit.JudgeInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

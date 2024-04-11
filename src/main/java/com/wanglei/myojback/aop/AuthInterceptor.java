@@ -1,7 +1,6 @@
 package com.wanglei.myojback.aop;
 
 
-
 import com.wanglei.myojback.annotation.AuthCheck;
 import com.wanglei.myojback.commmon.ErrorCode;
 import com.wanglei.myojback.constant.UserConstant;
@@ -48,7 +47,7 @@ public class AuthInterceptor {
         if (StringUtils.isNotBlank(mustRole)) {
             Integer userRoleNum = user.getUserRole();
             String userRole = "";
-            if(userRoleNum == UserConstant.ADMIN_ROLE){
+            if (userRoleNum == UserConstant.ADMIN_ROLE) {
                 userRole = "admin";
             }
             if (!mustRole.equals(userRole)) {

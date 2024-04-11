@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wanglei.myojback.commmon.ErrorCode;
 import com.wanglei.myojback.constant.CommonConstant;
 import com.wanglei.myojback.exception.BusinessException;
+import com.wanglei.myojback.judge.JudgeService;
 import com.wanglei.myojback.mapper.QuestionSubmitMapper;
 import com.wanglei.myojback.model.entity.Question;
 import com.wanglei.myojback.model.entity.QuestionSubmit;
@@ -17,7 +18,10 @@ import com.wanglei.myojback.service.QuestionService;
 import com.wanglei.myojback.service.QuestionSubmitService;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper, QuestionSubmit>
@@ -25,6 +29,10 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
 
     @Resource
     QuestionService questionService;
+
+    @Resource
+    @Lazy
+    private JudgeService judgeService;
 
     @Override
     public long doQuestionSubmit(QuestionSubmitAddRequest questionSubmitAddRequest, User loginUser) {
@@ -50,7 +58,13 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         if (!save) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据保存失败");
         }
-        return questionSubmit.getId();
+        Long questionSubmitId = questionSubmit.getId();
+        //执行判题服务
+//        judgeService.doJudge(questionSubmitId);
+        CompletableFuture.runAsync(() -> {
+            judgeService.doJudge(questionSubmitId);
+        });
+        return questionSubmitId;
     }
 
     @Override

@@ -33,7 +33,6 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author admin
  * @description 针对表【team(队伍)】的数据库操作Service实现
- *
  */
 @Service
 public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
@@ -83,7 +82,7 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码设置不正确");
         }
         Date expireTime = team.getExpireTime();
-        if(expireTime == null){
+        if (expireTime == null) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date());
             calendar.add(Calendar.MONTH, 1);
@@ -213,7 +212,7 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
             throw new BusinessException(ErrorCode.NULL_ERROR, "队伍不存在");
         }
         Date expireTime = teamUpdateRequest.getExpireTime();
-        if(expireTime == null){
+        if (expireTime == null) {
             expireTime = oldTeam.getExpireTime();
         }
         //只有创建者和管理员可修改

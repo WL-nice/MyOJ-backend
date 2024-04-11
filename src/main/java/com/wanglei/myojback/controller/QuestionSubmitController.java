@@ -50,7 +50,6 @@ public class QuestionSubmitController {
     }
 
     /**
-     *
      * @param questionSubmitQueryRequest
      * @param request
      * @return

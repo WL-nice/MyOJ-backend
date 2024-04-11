@@ -177,7 +177,7 @@ public class QuestionController {
             throw new BusinessException(ErrorCode.NULL_ERROR);
         }
         // 不是本人或管理员，不能直接获取所有信息
-        canOperateQuestion(request,question);
+        canOperateQuestion(request, question);
 
         return ResultUtils.success(question);
 
@@ -197,6 +197,7 @@ public class QuestionController {
         return ResultUtils.success(questionVO);
 
     }
+
     /**
      * 分页获取列表(管理员）
      *
@@ -205,8 +206,8 @@ public class QuestionController {
      */
     @PostMapping("/list/page")
     @AuthCheck(mustRole = "admin")
-    public BaseResponse<Page<Question>> listQuestionByPage(@RequestBody QuestionQueryRequest questionQueryRequest, HttpServletRequest request){
-        if(questionQueryRequest==null){
+    public BaseResponse<Page<Question>> listQuestionByPage(@RequestBody QuestionQueryRequest questionQueryRequest, HttpServletRequest request) {
+        if (questionQueryRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         long current = questionQueryRequest.getCurrent();
