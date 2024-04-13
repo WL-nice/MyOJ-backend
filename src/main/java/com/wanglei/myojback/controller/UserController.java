@@ -99,24 +99,12 @@ public class UserController {
     @GetMapping("/current")
     public BaseResponse<User> getCurrentUser(HttpServletRequest request) {
         Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
+        if (userObj == null) {
+            throw new BusinessException(ErrorCode.NO_LOGIN);
+        }
         User currentUser = (User) userObj;
-        if (currentUser == null) {
-            throw new BusinessException(ErrorCode.NULL_ERROR);
-        }
-        Long id = currentUser.getId();
-        String redisKey = String.format("MyOJ:current:%s", currentUser.getId());
-        ValueOperations<String, Object> ops = redisTemplate.opsForValue();
-        User safetyuser = (User) ops.get(redisKey);
-        if (safetyuser != null) {
-            return ResultUtils.success(safetyuser);
-        }
-        User user = userService.getById(id);
-        safetyuser = userService.getSafetUser(user);
-        try {
-            ops.set(redisKey, safetyuser, 5, TimeUnit.MINUTES);
-        } catch (Exception e) {
-            log.error("redis set key error", e);
-        }
+//        User user = userService.getById(currentUser.getId());
+        User safetyuser = userService.getSafetUser(currentUser);
         return ResultUtils.success(safetyuser);
     }
 
@@ -137,6 +125,7 @@ public class UserController {
      * @param pageNum  当前页数
      */
     @GetMapping("/search")
+    @AuthCheck(mustRole = "admin")
     public BaseResponse<Page<User>> userSearch(long pageSize, long pageNum, HttpServletRequest request) {
         User loginUser = userService.getLoginUser(request);
         //如果有缓存，直接读缓存
@@ -159,7 +148,6 @@ public class UserController {
     }
 
     @PostMapping("/list/page")
-    @AuthCheck(mustRole = "admin")
     public BaseResponse<Page<UserVo>> listUserByPage(@RequestBody UserQueryRequest userQueryRequest, HttpServletRequest request) {
         if (userQueryRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
