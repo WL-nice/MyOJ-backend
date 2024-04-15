@@ -81,9 +81,9 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         String sortField = questionsubmitQueryRequest.getSortField();
         QueryWrapper<QuestionSubmit> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(StringUtils.isNotBlank(language), "language", language);
-        queryWrapper.eq(questionId > 0, "questionId", questionId);
-        queryWrapper.eq(userId > 0, "userId", userId);
-        queryWrapper.eq(status < 3 && status >= 0, "status", status);
+        queryWrapper.eq(questionId != null && questionId > 0, "questionId", questionId);
+        queryWrapper.eq(userId != null && userId > 0, "userId", userId);
+        queryWrapper.eq(status != null && status < 3 && status >= 0, "status", status);
         queryWrapper.orderBy(StringUtils.isNotBlank(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC), sortField);
         return queryWrapper;
 

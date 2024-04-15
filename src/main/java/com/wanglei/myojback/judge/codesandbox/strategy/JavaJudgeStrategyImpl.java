@@ -9,6 +9,7 @@ import com.wanglei.myojback.model.request.question.JudgeConfig;
 import com.wanglei.myojback.judge.codesandbox.model.JudgeInfo;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Java 默认判题策略
@@ -23,8 +24,8 @@ public class JavaJudgeStrategyImpl implements JudgeStrategy {
         Question question = judgeContext.getQuestion();
         QuestionSubmit questionSubmit = judgeContext.getQuestionSubmit();
 
-        long time = judgeInfo.getTime();
-        long memory = judgeInfo.getMemory();
+        long time = Optional.ofNullable(judgeInfo.getTime()).orElse(0L);
+        long memory = Optional.ofNullable(judgeInfo.getMemory()).orElse(0L);
         JudgeInfo judgeInfoResponse = new JudgeInfo();
         judgeInfoResponse.setTime(time);
         judgeInfoResponse.setMemory(memory);
