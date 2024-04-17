@@ -1,6 +1,7 @@
 package com.wanglei.myojback.judge;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import cn.hutool.json.JSONUtil;
@@ -15,6 +16,7 @@ import com.wanglei.myojback.judge.codesandbox.strategy.JudgeContext;
 import com.wanglei.myojback.model.entity.Question;
 import com.wanglei.myojback.model.entity.QuestionSubmit;
 
+import com.wanglei.myojback.model.enums.JudgeInfoMessage;
 import com.wanglei.myojback.model.enums.QuestionSubmitStatus;
 import com.wanglei.myojback.model.request.question.JudgeCase;
 
@@ -89,7 +91,11 @@ public class JudgeServiceImpl implements JudgeService {
         judgeContext.setQuestionSubmit(questionSubmit);
 
         JudgeInfo judgeInfo = judgeManage.doJudge(judgeContext);
-
+        //若结果正确 更新数据库
+        if (Objects.equals(judgeInfo.getMessage(), JudgeInfoMessage.ACCEPTED.getValue())) {
+            question.setAcceptedNum(question.getAcceptedNum() + 1);
+            questionService.updateById(question);
+        }
         //修改判题结果
         questionSubmitUpdate = new QuestionSubmit();
         questionSubmitUpdate.setStatus(QuestionSubmitStatus.SUCCEED.getValue());

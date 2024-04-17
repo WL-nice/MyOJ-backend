@@ -10,6 +10,7 @@ import com.wanglei.myojback.model.entity.QuestionSubmit;
 import com.wanglei.myojback.model.entity.User;
 import com.wanglei.myojback.model.request.questionsubmit.QuestionSubmitAddRequest;
 import com.wanglei.myojback.model.request.questionsubmit.QuestionSubmitQueryRequest;
+import com.wanglei.myojback.model.vo.QuestionSubmitVO;
 import com.wanglei.myojback.service.QuestionSubmitService;
 import com.wanglei.myojback.service.UserService;
 import jakarta.annotation.Resource;
@@ -55,7 +56,7 @@ public class QuestionSubmitController {
      * @return
      */
     @PostMapping("/list/page")
-    public BaseResponse<Page<QuestionSubmit>> listQuestionByPage(@RequestBody QuestionSubmitQueryRequest questionSubmitQueryRequest, HttpServletRequest request) {
+    public BaseResponse<Page<QuestionSubmitVO>> listQuestionByPage(@RequestBody QuestionSubmitQueryRequest questionSubmitQueryRequest, HttpServletRequest request) {
         if (questionSubmitQueryRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -63,6 +64,7 @@ public class QuestionSubmitController {
         long size = questionSubmitQueryRequest.getPageSize();
         QueryWrapper<QuestionSubmit> queryWrapper = questionSubmitService.getQueryWrapper(questionSubmitQueryRequest);
         Page<QuestionSubmit> questionPage = questionSubmitService.page(new Page<>(current, size), queryWrapper);
-        return ResultUtils.success(questionPage);
+        Page<QuestionSubmitVO> questionSubmitVOPage = questionSubmitService.getQuestionVOPage(questionPage, request);
+        return ResultUtils.success(questionSubmitVOPage);
     }
 }
